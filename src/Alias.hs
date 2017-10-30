@@ -5,8 +5,6 @@ import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
 import System.FilePath.Posix (joinPath, splitPath)
 
-import qualified Control.Exception as E
-
 data Alias = Alias
   { name :: String
   , path :: FilePath
@@ -14,7 +12,7 @@ data Alias = Alias
   deriving (Show)
 
 data AliasError
-  = PathDoesNotExist
+  = PathDoesNotExist FilePath
   deriving (Show)
 
 type AliasT a = ExceptT AliasError IO a
@@ -25,7 +23,7 @@ verifyDirectory p = either throwE return =<< liftIO (safeDirectoryExist p)
     safeDirectoryExist :: FilePath -> IO (Either AliasError FilePath)
     safeDirectoryExist p = do
       exist <- doesDirectoryExist p
-      return $ if exist then Right p else Left PathDoesNotExist
+      return $ if exist then Right p else Left (PathDoesNotExist p)
 
 expandPath :: FilePath -> IO FilePath
 expandPath p =
@@ -40,9 +38,7 @@ verifyAndExpand p = do
   liftIO $ makeAbsolute verifiedP
 
 renderError :: AliasError -> IO ()
-renderError e = do
-  print e
-  return ()
+renderError (PathDoesNotExist p) = putStrLn ("Path `" ++ p ++ "` does not exist")
 
 runAliasT :: AliasT a -> IO (Either AliasError a)
 runAliasT = runExceptT
