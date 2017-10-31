@@ -5,6 +5,8 @@ import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
 import System.FilePath.Posix (joinPath, splitPath, isValid)
 import Data.Char
+import Data.Maybe
+import Control.Applicative ((<$>))
 
 data Alias = Alias
   { name :: String
@@ -29,6 +31,22 @@ instance Read Alias where
 
 
 type AliasT a = ExceptT AliasError IO a
+
+maybeRead :: Read a => String -> Maybe a
+maybeRead s = case reads s of
+  [(x, "")] -> Just x
+  _         -> Nothing
+
+readAliases :: String -> [Alias]
+readAliases s = fromJust <$> filter isJust maybeAliases
+  where
+    maybeAliases :: [Maybe Alias]
+    maybeAliases = fmap maybeRead (lines s)
+
+readAliasesFromFile :: FilePath -> IO [Alias]
+readAliasesFromFile p = do
+  content <- readFile p
+  return $ readAliases content
 
 replaceHome :: FilePath -> IO FilePath
 replaceHome p =
