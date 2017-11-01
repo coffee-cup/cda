@@ -6,7 +6,7 @@ import Control.Applicative
 import Parser
 import Alias
 
--- alias name="/path/"
+-- alias name="cd /path/"
 
 aliasIdent :: Parser String
 aliasIdent =
@@ -26,13 +26,15 @@ bashAliasP = do
   n <- nameP
   char '='
   char '"'
+  string "cd"
+  spaces
   p <- pathP
   char '"'
   return $ Alias n p
 
 toBash :: Alias -> String
 toBash a =
-  "alias " ++ name a ++ "=\"" ++ path a ++ "\""
+  "alias " ++ name a ++ "=\"cd " ++ path a ++ "\""
 
 fromBash :: String -> Maybe Alias
 fromBash =
