@@ -1,8 +1,9 @@
 module Main where
 
 import Data.Monoid
+import Control.Monad
 import Options.Applicative
-import Lib
+import Alias
 
 data Command
   = List              -- List all aliases
@@ -37,7 +38,15 @@ parseCommand = subparser $
   command "rm"    (parseDelete `withInfo` "Remove cd alias") <>
   command "cd"    (parseCD     `withInfo` "Change directories using an alias")
 
+doCommand :: Command -> IO ()
+doCommand List = do
+  aliases <- readAliasesFromFile filename
+  forM_ aliases $ \a -> putStrLn (name a ++ " -> " ++ path a)
+
+filename :: String
+filename = "testing.txt"
+
 main :: IO ()
 main = do
   cmd <- execParser (parseCommand `withInfo` "Create and manage cd aliases")
-  print cmd
+  doCommand cmd

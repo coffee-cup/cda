@@ -1,6 +1,7 @@
 module Alias where
 
 import System.Directory
+import Control.Monad
 import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
 import System.FilePath.Posix (joinPath, splitPath, isValid)
@@ -45,8 +46,26 @@ readAliases s = fromJust <$> filter isJust maybeAliases
 
 readAliasesFromFile :: FilePath -> IO [Alias]
 readAliasesFromFile p = do
-  content <- readFile p
-  return $ readAliases content
+  exist <- doesFileExist p
+  if exist then do
+    content <- readFile p
+    return $ readAliases content
+  else
+    return []
+
+createFileIfNotExist :: FilePath -> IO ()
+createFileIfNotExist p = do
+  exist <- doesFileExist p
+  unless exist $ writeFile p ""
+
+aliasesToString :: [Alias] -> String
+aliasesToString = foldr (\a b -> show a ++ "\n" ++ b) ""
+
+writeNewAlias :: Alias -> FilePath -> IO ()
+writeNewAlias a p = do
+  aliases <- readAliasesFromFile p
+  let aliasS = aliasesToString $ a : aliases
+  writeFile p aliasS
 
 replaceHome :: FilePath -> IO FilePath
 replaceHome p =
