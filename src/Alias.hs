@@ -21,6 +21,7 @@ data Alias = Alias
 data AliasError
   = PathDoesNotExist FilePath
   | AliasAlreadyExists Name
+  | AliasDoesNotExist Name
   deriving (Show)
 
 instance Show Alias where
@@ -68,15 +69,20 @@ createFileIfNotExist p = do
 aliasesToString :: [Alias] -> String
 aliasesToString = foldr (\a b -> show a ++ "\n" ++ b) ""
 
-writeNewAlias :: Alias -> FilePath -> AliasT ()
-writeNewAlias a p = do
+writeNewAlias :: FilePath -> Alias -> AliasT ()
+writeNewAlias p a = do
   aliases <- liftIO $ readAliasesFromFile p
   unless (verifyAliasUniquness a aliases) (throwE (AliasAlreadyExists $ name a))
-  let aliasS = aliasesToString $ a : aliases
-  liftIO $ writeFile p aliasS
+  liftIO $ writeAliases p (a : aliases)
+
+writeAliases :: FilePath -> [Alias] -> IO ()
+writeAliases p = writeFile p . aliasesToString
 
 verifyAliasUniquness :: Alias -> [Alias] -> Bool
 verifyAliasUniquness = notElem
+
+verifyAliasExist :: Name -> [Alias] -> Bool
+verifyAliasExist n = verifyAliasUniquness (Alias n "")
 
 replaceHome :: FilePath -> IO FilePath
 replaceHome p =
@@ -101,11 +107,17 @@ verifyAndExpand p = do
 renderError :: AliasError -> IO ()
 renderError (PathDoesNotExist p) = putStrLn ("Path `" ++ p ++ "` does not exist")
 renderError (AliasAlreadyExists n) = putStrLn ("Alias `" ++ n ++ "` already exists")
+renderError (AliasDoesNotExist n) = putStrLn ("Alias `" ++ n ++ "` does not exist")
 
-createAlias :: Name -> FilePath -> AliasT Alias
+createAlias :: FilePath -> Name -> AliasT Alias
 createAlias n p = do
   expandedP <- verifyAndExpand p
   return $ Alias n expandedP
+
+deleteAlias :: Name -> [Alias] -> AliasT [Alias]
+deleteAlias n aliases = do
+  when (verifyAliasExist n aliases) (throwE (AliasDoesNotExist n))
+  return $ filter (\a -> name a /= n) aliases
 
 runAliasT :: AliasT a -> IO (Either AliasError a)
 runAliasT = runExceptT
