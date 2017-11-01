@@ -1,25 +1,33 @@
 module Alias where
 
+import Prelude hiding (readFile)
 import System.Directory
 import Control.Monad
 import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
+import System.IO.Strict (readFile)
 import System.FilePath.Posix (joinPath, splitPath, isValid)
 import Data.Char
 import Data.Maybe
 import Control.Applicative ((<$>))
 
+type Name = String
+
 data Alias = Alias
-  { name :: String
+  { name :: Name
   , path :: FilePath
   }
 
 data AliasError
   = PathDoesNotExist FilePath
+  | AliasAlreadyExists Name
   deriving (Show)
 
 instance Show Alias where
   show a = name a ++ ":" ++ path a
+
+instance Eq Alias where
+  a1 == a2 = name a1 == name a2
 
 instance Read Alias where
   readsPrec _ input =
@@ -29,7 +37,6 @@ instance Read Alias where
       (p, rest2) = splitAtFirst '\n' rest1
     in
       [(Alias n p, rest2) | all isAlpha n && n /= "" && isValid p]
-
 
 type AliasT a = ExceptT AliasError IO a
 
@@ -61,11 +68,15 @@ createFileIfNotExist p = do
 aliasesToString :: [Alias] -> String
 aliasesToString = foldr (\a b -> show a ++ "\n" ++ b) ""
 
-writeNewAlias :: Alias -> FilePath -> IO ()
+writeNewAlias :: Alias -> FilePath -> AliasT ()
 writeNewAlias a p = do
-  aliases <- readAliasesFromFile p
+  aliases <- liftIO $ readAliasesFromFile p
+  unless (verifyAliasUniquness a aliases) (throwE (AliasAlreadyExists $ name a))
   let aliasS = aliasesToString $ a : aliases
-  writeFile p aliasS
+  liftIO $ writeFile p aliasS
+
+verifyAliasUniquness :: Alias -> [Alias] -> Bool
+verifyAliasUniquness = notElem
 
 replaceHome :: FilePath -> IO FilePath
 replaceHome p =
@@ -89,6 +100,12 @@ verifyAndExpand p = do
 
 renderError :: AliasError -> IO ()
 renderError (PathDoesNotExist p) = putStrLn ("Path `" ++ p ++ "` does not exist")
+renderError (AliasAlreadyExists n) = putStrLn ("Alias `" ++ n ++ "` already exists")
+
+createAlias :: Name -> FilePath -> AliasT Alias
+createAlias n p = do
+  expandedP <- verifyAndExpand p
+  return $ Alias n expandedP
 
 runAliasT :: AliasT a -> IO (Either AliasError a)
 runAliasT = runExceptT
