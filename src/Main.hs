@@ -3,6 +3,7 @@ module Main where
 import Control.Monad
 import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
+import System.Posix.Directory
 
 import Commands
 import Parser
@@ -21,6 +22,11 @@ doCommand (Delete n) = do
   newAliases <- deleteAlias n aliases
   liftIO $ writeAliases filename newAliases
   liftIO $ putStrLn $ "Deleted alias " ++ n
+doCommand (CD n) = do
+  aliases <- liftIO $ readAliasesFromFile filename
+  p <- getAliasPath n aliases
+  liftIO $ putStrLn p
+  liftIO $ changeWorkingDirectory p
 
 filename :: String
 filename = "testing.txt"

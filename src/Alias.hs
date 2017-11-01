@@ -105,9 +105,9 @@ verifyAndExpand p = do
   liftIO $ makeAbsolute verifiedP
 
 renderError :: AliasError -> IO ()
-renderError (PathDoesNotExist p) = putStrLn ("Path `" ++ p ++ "` does not exist")
-renderError (AliasAlreadyExists n) = putStrLn ("Alias `" ++ n ++ "` already exists")
-renderError (AliasDoesNotExist n) = putStrLn ("Alias `" ++ n ++ "` does not exist")
+renderError (PathDoesNotExist p)    = putStrLn ("Path `" ++ p ++ "` does not exist")
+renderError (AliasAlreadyExists n)  = putStrLn ("Alias `" ++ n ++ "` already exists")
+renderError (AliasDoesNotExist n)   = putStrLn ("Alias `" ++ n ++ "` does not exist")
 
 createAlias :: FilePath -> Name -> AliasT Alias
 createAlias n p = do
@@ -118,6 +118,11 @@ deleteAlias :: Name -> [Alias] -> AliasT [Alias]
 deleteAlias n aliases = do
   when (verifyAliasExist n aliases) (throwE (AliasDoesNotExist n))
   return $ filter (\a -> name a /= n) aliases
+
+getAliasPath :: Name -> [Alias] -> AliasT FilePath
+getAliasPath n aliases = do
+  when (verifyAliasExist n aliases) (throwE (AliasDoesNotExist n))
+  return $ path $ head $ filter (\a -> name a == n) aliases
 
 runAliasT :: AliasT a -> IO (Either AliasError a)
 runAliasT = runExceptT
