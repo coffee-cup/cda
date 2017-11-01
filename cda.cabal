@@ -16,7 +16,7 @@ cabal-version:       >=1.10
 executable cda
   hs-source-dirs:      src
   main-is:             Main.hs
-  other-modules:     Lib, Parser, Commands, Alias
+  other-modules:       Lib, CommandParser, Commands, Alias, Parser, AliasParser, AliasIO
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-patterns
   build-depends:       base
                      , optparse-applicative >= 0.14 && < 0.15

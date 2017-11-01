@@ -6,13 +6,14 @@ import Control.Monad.IO.Class
 import System.Posix.Directory
 
 import Commands
-import Parser
+import CommandParser
 import Alias
+import AliasIO
 
 doCommand :: Command -> AliasT ()
 doCommand List = do
   aliases <- liftIO $ readAliasesFromFile filename
-  liftIO $ forM_ aliases $ \a -> putStrLn (name a ++ " -> " ++ path a)
+  liftIO $ forM_ aliases $ \a -> print a
 doCommand Init = do
   liftIO $ createFileIfNotExist filename
   liftIO $ putStrLn $ "Alias file at `" ++ filename ++ "`"
