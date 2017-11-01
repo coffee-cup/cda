@@ -11,6 +11,9 @@ withInfo p desc = info (helper <*> p) $ progDesc desc
 parseList :: Parser Command
 parseList = pure List
 
+parseInit :: Parser Command
+parseInit = pure Init
+
 parseSet :: Parser Command
 parseSet = Set
   <$> argument str (metavar "NAME")
@@ -26,10 +29,11 @@ parseCD = CD
 
 parseCommand :: Parser Command
 parseCommand = subparser $
-  command "list"  (parseList   `withInfo` "List cd aliases") <>
-  command "set"   (parseSet    `withInfo` "Create cd alias") <>
-  command "rm"    (parseDelete `withInfo` "Remove cd alias") <>
-  command "cd"    (parseCD     `withInfo` "Change directories using an alias")
+  command "list"  (parseList    `withInfo` "List cd aliases") <>
+  command "set"   (parseSet     `withInfo` "Create cd alias") <>
+  command "rm"    (parseDelete  `withInfo` "Remove cd alias") <>
+  command "cd"    (parseCD      `withInfo` "Change directories using an alias") <>
+  command "init"  (parseInit    `withInfo` "Initializes alias file")
 
 getCommand :: IO Command
 getCommand =

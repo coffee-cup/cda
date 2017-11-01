@@ -13,6 +13,9 @@ doCommand :: Command -> AliasT ()
 doCommand List = do
   aliases <- liftIO $ readAliasesFromFile filename
   liftIO $ forM_ aliases $ \a -> putStrLn (name a ++ " -> " ++ path a)
+doCommand Init = do
+  liftIO $ createFileIfNotExist filename
+  liftIO $ putStrLn $ "Alias file at `" ++ filename ++ "`"
 doCommand (Set n p) = do
   alias <- createAlias n p
   writeNewAlias filename alias
@@ -28,7 +31,7 @@ doCommand (CD n) = do
   liftIO $ putStrLn p
   liftIO $ changeWorkingDirectory p
 
-filename :: String
+filename :: FilePath
 filename = "testing.txt"
 
 main :: IO ()

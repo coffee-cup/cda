@@ -67,7 +67,7 @@ createFileIfNotExist p = do
   unless exist $ writeFile p ""
 
 aliasesToString :: [Alias] -> String
-aliasesToString = foldr (\a b -> show a ++ "\n" ++ b) ""
+aliasesToString = foldr (\a acc -> show a ++ "\n" ++ acc) ""
 
 writeNewAlias :: FilePath -> Alias -> AliasT ()
 writeNewAlias p a = do
