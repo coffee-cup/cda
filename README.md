@@ -59,9 +59,7 @@ p -> /Users/user/dev/project
 
 You can then use the alias with the `d` command.
 
-### Removing Aliases
-
-Remove an alias.
+### Remove Alias
 
 ```
 cda rm NAME
