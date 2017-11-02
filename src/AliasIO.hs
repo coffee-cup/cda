@@ -85,7 +85,6 @@ writeNewAlias p a = do
   unless (verifyAliasUniquness a aliases) (throwE (AliasAlreadyExists $ name a))
   liftIO $ writeAliases p (a : aliases)
 
-
 verifyDirectory :: FilePath -> AliasT FilePath
 verifyDirectory p = either throwE return =<< liftIO (safeDirectoryExist p)
   where
