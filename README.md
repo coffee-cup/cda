@@ -72,3 +72,12 @@ For example,
 ```
 cda rm d
 ```
+
+## Development
+
+Use [Stack](https://docs.haskellstack.org/en/stable/README/).
+
+```
+stack build
+stack exec cda COMMAND
+```
