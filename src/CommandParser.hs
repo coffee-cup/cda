@@ -23,17 +23,12 @@ parseDelete :: Parser Command
 parseDelete = Delete
   <$> argument str (metavar "NAME")
 
-parseCD :: Parser Command
-parseCD = CD
-  <$> argument str (metavar "NAME")
-
 parseCommand :: Parser Command
 parseCommand = subparser $
-  command "list"  (parseList    `withInfo` "List cd aliases") <>
-  command "set"   (parseSet     `withInfo` "Create cd alias") <>
-  command "rm"    (parseDelete  `withInfo` "Remove cd alias") <>
-  command "cd"    (parseCD      `withInfo` "Change directories using an alias") <>
-  command "init"  (parseInit    `withInfo` "Initializes alias file")
+  command "list"  (parseList    `withInfo` "List cd aliases")         <>
+  command "init"  (parseInit    `withInfo` "Initializes alias file")  <>
+  command "set"   (parseSet     `withInfo` "Create cd alias")         <>
+  command "rm"    (parseDelete  `withInfo` "Remove cd alias")
 
 getCommand :: IO Command
 getCommand =
