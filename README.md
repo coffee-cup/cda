@@ -4,6 +4,12 @@ Command line app for creating and managing `cd` aliases.
 
 ![cda](https://user-images.githubusercontent.com/3044853/32304787-e4a5b214-bf2e-11e7-9e29-8a9dc0c5a063.gif)
 
+## Installation
+
+[Download the binary](https://github.com/coffee-cup/cda/releases/download/v0.1-beta/cda) and add it to your path.
+
+Run `cda init` and see usage instructions.
+
 ## Usage
 
 ```
