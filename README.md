@@ -2,9 +2,11 @@
 
 Command line app for creating and managing `cd` aliases.
 
+![cda](https://user-images.githubusercontent.com/3044853/32304742-af38a3ca-bf2e-11e7-94e7-0daa3c85310f.gif)
+
 ## Usage
 
-```sh
+```
 ❯ cda -- -h
 Usage: cda COMMAND
   Create and manage cd aliases
@@ -23,7 +25,7 @@ Available commands:
 
 Initializes the aliases with
 
-```sh
+```
 cda init
 ```
 
@@ -39,13 +41,13 @@ in your `~/.bash_profile` or `~/.zshrc` or equivalent. This bash function just s
 
 Create and alias called `NAME` which points to `DIRECTORY`
 
-```sh
+```
 cda set NAME DIRECTORY
 ```
 
 For example, create an alias called `p` which will `cd` you into the `~/dev/project` directory.
 
-```sh
+```
 ~/dev/project
 ❯ cda set p .
 Created alias p
@@ -61,12 +63,12 @@ You can then use the alias with the `d` command.
 
 Remove an alias.
 
-```sh
+```
 cda rm NAME
 ```
 
 For example,
 
-```sh
+```
 cda rm d
 ```
