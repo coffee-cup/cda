@@ -2,7 +2,7 @@
 
 Command line app for creating and managing `cd` aliases.
 
-![cda](https://user-images.githubusercontent.com/3044853/32304742-af38a3ca-bf2e-11e7-94e7-0daa3c85310f.gif)
+![cda](https://user-images.githubusercontent.com/3044853/32304787-e4a5b214-bf2e-11e7-9e29-8a9dc0c5a063.gif)
 
 ## Usage
 
