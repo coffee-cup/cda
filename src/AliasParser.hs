@@ -1,6 +1,5 @@
 module AliasParser where
 
-import Data.Char
 import Control.Applicative
 
 import Parser

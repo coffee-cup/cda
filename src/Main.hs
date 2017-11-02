@@ -1,9 +1,7 @@
 module Main where
 
 import Control.Monad
-import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
-import System.Posix.Directory
 
 import Commands
 import CommandParser
@@ -13,7 +11,7 @@ import AliasIO
 initString :: String
 initString =
   "Alias file at `" ++ filename ++ "`. Please place \n\n\t \
-  \ export -f cda () { stack exec cda \"$@\"; source " ++ filename ++ "; } \n\n\
+  \ export -f cda () { command cda \"$@\"; source " ++ filename ++ "; } \n\n\
   \at then end of ~/.bash_profile or equivalent."
 
 doCommand :: Command -> AliasT ()

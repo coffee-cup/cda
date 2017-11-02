@@ -7,7 +7,6 @@ import Control.Monad.Trans.Except
 import Control.Monad.IO.Class
 import System.IO.Strict (readFile)
 import System.FilePath.Posix (joinPath, splitPath, isValid)
-import Data.Char
 import Data.Maybe
 import Control.Applicative ((<$>))
 

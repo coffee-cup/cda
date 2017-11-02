@@ -1,7 +1,6 @@
 module CommandParser where
 
 import Data.Monoid
-import Control.Monad
 import Options.Applicative
 import Commands
 
