@@ -11,7 +11,7 @@ import AliasIO
 initString :: String
 initString =
   "Alias file at `" ++ filename ++ "`. Please place \n\n\t \
-  \ export -f cda () { command cda \"$@\"; source " ++ filename ++ "; } \n\n\
+  \ export -f cda () { command cda \"$@\"; source " ++ filename ++ "; }; source " ++ filename ++ ";\n\n\
   \at then end of ~/.bash_profile or equivalent."
 
 doCommand :: Command -> AliasT ()

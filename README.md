@@ -38,10 +38,10 @@ cda init
 Then place
 
 ```sh
-export -f cda () { command cda "$@"; source ~/.cda; }
+export -f cda () { command cda "$@"; source ~/.cda; }; source ~/.cda;
 ```
 
-in your `~/.bash_profile` or `~/.zshrc` or equivalent. This bash function just sources the alias file after each run of `cda`.
+in your `~/.bash_profile` or `~/.zshrc` or equivalent. This bash function just sources the alias file after each run of `cda` and on startup of your shell.
 
 ### Create Alias
 
