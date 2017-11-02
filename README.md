@@ -13,7 +13,7 @@ Run `cda init` and see usage instructions.
 ## Usage
 
 ```
-❯ cda -- -h
+❯ cda -h
 Usage: cda COMMAND
   Create and manage cd aliases
 
