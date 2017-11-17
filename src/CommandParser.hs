@@ -25,7 +25,7 @@ parseDelete = Delete
 parseCommand :: Parser Command
 parseCommand = subparser $
   command "list"  (parseList    `withInfo` "List cd aliases")         <>
-  command "init"  (parseInit    `withInfo` "Initializes alias file")  <>
+  command "init"  (parseInit    `withInfo` "Initialize alias file")  <>
   command "set"   (parseSet     `withInfo` "Create cd alias")         <>
   command "rm"    (parseDelete  `withInfo` "Remove cd alias")
 

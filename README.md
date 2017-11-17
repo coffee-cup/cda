@@ -6,7 +6,12 @@ Command line app for creating and managing `cd` aliases.
 
 ## Installation
 
-[Download the binary](https://github.com/coffee-cup/cda/releases/download/v0.1-beta/cda) and add it to your path.
+This tool can be installed as a [Homebrew](https://brew.sh/) [tap](https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md)
+
+```
+brew tap coffee-cup/cda
+brew install cda
+```
 
 Run `cda init` and see usage instructions.
 
