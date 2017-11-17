@@ -48,6 +48,8 @@ export -f cda () { command cda "$@"; source ~/.cda; }; source ~/.cda;
 
 in your `~/.bash_profile` or `~/.zshrc` or equivalent. This bash function just sources the alias file after each run of `cda` and on startup of your shell.
 
+You should then source your config (`~/.bash_profile` or `~/.zshrc`) to load this function.
+
 ### Create Alias
 
 Create and alias called `NAME` which points to `DIRECTORY`
