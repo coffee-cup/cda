@@ -70,7 +70,7 @@ Created alias p
 p -> /Users/user/dev/project
 ```
 
-You can then use the alias with the `d` command.
+You can then use the alias with the `p` command.
 
 ### Remove Alias
 
